@@ -18,10 +18,9 @@ package androidx.viewpager2.integration.testapp.test
 
 import androidx.test.filters.LargeTest
 import androidx.viewpager2.integration.testapp.CardViewActivity
-import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-@Ignore("wip")
+
 @LargeTest
 @RunWith(Parameterized::class)
 class ViewPagerViewTest(config: ViewPagerBaseTest.TestConfig) :
