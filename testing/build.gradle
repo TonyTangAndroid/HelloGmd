@@ -1,0 +1,60 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
+android {
+    compileSdk 35
+    namespace 'androidx.viewpager2.integration.testapp.test'
+    defaultConfig {
+        minSdk 28
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        managedDevices {
+            devices {
+                // run with ../gradlew  nexusOneApi30DebugAndroidTest
+                nexusOneApi30(ManagedVirtualDevice) {
+                    // A lower resolution device is used here for better emulator performance
+                    device = "Nexus One"
+                    apiLevel = 30
+                    // Also use the AOSP ATD image for better emulator performance
+                    systemImageSource = "aosp-atd"
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    api project(':core')
+    api 'androidx.test:rules:1.6.1'
+    api 'androidx.test.ext:junit:1.2.1'
+    api 'androidx.test.espresso:espresso-core:3.6.1'
+    api 'junit:junit:4.13.2'
+    api 'com.google.truth:truth:1.4.4'
+    testImplementation('org.robolectric:robolectric:4.14.1')
+}

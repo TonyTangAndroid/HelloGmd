@@ -1,0 +1,29 @@
+name: Android Feature Branch CI
+
+on:
+  pull_request:
+    branches:
+      - '*'
+      - '!master'
+      - '!release*'
+
+jobs:
+  basic_compile_and_test:
+    name: "Conduct gradle managed test"
+    runs-on: macos-latest
+    steps:
+      - name: "1: checking out repo"
+        uses: actions/checkout@v4.2.2
+      - name: "2: Config gradle"
+        uses: gradle/gradle-build-action@v3.5.0
+        with:
+          gradle-version: 8.12.1
+      - name: "3: Config Java"
+        uses: actions/setup-java@v4.6.0
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: "4_1: testing "
+        run: ./gradlew :testing:nexusOneApi30DebugAndroidTest
+      - name: "4_2: Compile apk"
+        run: ./gradlew :app:assembleDebug
