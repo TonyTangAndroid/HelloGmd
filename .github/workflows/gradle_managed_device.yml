@@ -25,6 +25,8 @@ jobs:
           java-version: 17
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+      - name: "6:Accept licenses"
+        run: yes | sdkmanager --licenses || true
       - name: "4_1: testing "
         run: ./gradlew :testing:nexusOneApi30DebugAndroidTest --max-workers=1
       - name: "4_2: Compile apk"
