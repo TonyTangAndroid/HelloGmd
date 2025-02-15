@@ -1,4 +1,4 @@
-name: NowInAndroid CI
+name: Mac CI
 on:
   pull_request:
     branches:

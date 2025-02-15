@@ -1,4 +1,4 @@
-name: NowInAndroid CI
+name: Ubuntu CI
 on:
   pull_request:
     branches:
