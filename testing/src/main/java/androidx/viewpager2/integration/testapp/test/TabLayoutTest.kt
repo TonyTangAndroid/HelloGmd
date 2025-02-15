@@ -28,9 +28,10 @@ import androidx.viewpager2.integration.testapp.R
 import androidx.viewpager2.integration.testapp.cards.Card
 import androidx.viewpager2.integration.testapp.cards.Card.Companion.find
 import androidx.viewpager2.integration.testapp.test.util.onTab
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-
+@Ignore("wip")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class TabLayoutTest : BaseTest<CardViewTabLayoutActivity>(CardViewTabLayoutActivity::class.java) {

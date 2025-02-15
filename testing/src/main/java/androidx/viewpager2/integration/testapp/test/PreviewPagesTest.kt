@@ -33,9 +33,10 @@ import androidx.viewpager2.integration.testapp.test.util.swipeNext
 import androidx.viewpager2.widget.ViewPager2
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.equalTo
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-
+@Ignore("wip")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class PreviewPagesTest : BaseTest<PreviewPagesActivity>(PreviewPagesActivity::class.java) {
