@@ -36,7 +36,7 @@ class MinAndroidTestTest {
   }
 
   @Test
-  fun test321() {
+  fun test456() {
     val context: Context = ApplicationProvider.getApplicationContext()
     assertThat(context.packageName).isNotEqualTo("androidx.viewpager2.integration.testapp.test")
   }
