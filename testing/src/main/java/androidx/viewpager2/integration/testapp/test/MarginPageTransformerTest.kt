@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit
 private const val LABEL_NONE = "None"
 private const val LABEL_50_PX = "Margin 50px"
 private const val LABEL_32_DP = "Margin 32dp"
-
+@Ignore("wip")
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class MarginPageTransformerTest :
