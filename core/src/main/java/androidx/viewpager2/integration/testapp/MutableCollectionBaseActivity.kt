@@ -58,15 +58,15 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
         }
 
         buttonRemove.setOnClickListener {
-            changeDataSet { items.removeAt(itemSpinner.selectedItemPosition) }
+            changeDataSet { dataMoel.removeAt(itemSpinner.selectedItemPosition) }
         }
 
         buttonAddBefore.setOnClickListener {
-            changeDataSet { items.addNewAt(itemSpinner.selectedItemPosition) }
+            changeDataSet { dataMoel.addNewAt(itemSpinner.selectedItemPosition) }
         }
 
         buttonAddAfter.setOnClickListener {
-            changeDataSet { items.addNewAt(itemSpinner.selectedItemPosition + 1) }
+            changeDataSet { dataMoel.addNewAt(itemSpinner.selectedItemPosition + 1) }
         }
     }
 
@@ -86,9 +86,9 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
 
     private fun setupSpinner() {
         itemSpinner.adapter = object : BaseAdapter() {
-            override fun getItem(position: Int): String = items.getItemById(getItemId(position))
-            override fun getItemId(position: Int): Long = items.itemId(position)
-            override fun getCount(): Int = items.size
+            override fun getItem(position: Int): String = dataMoel.getItemById(getItemId(position))
+            override fun getItemId(position: Int): Long = dataMoel.itemId(position)
+            override fun getCount(): Int = dataMoel.size
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
                 ((convertView as TextView?) ?: TextView(parent.context)).apply {
                     textDirection = View.TEXT_DIRECTION_LOCALE
@@ -110,27 +110,29 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
 
     abstract fun createViewPagerAdapter(): RecyclerView.Adapter<*>
 
-    val items: ItemsViewModel by viewModels()
+    val dataMoel: ItemsViewModel by viewModels()
 
     @SuppressLint("NotifyDataSetChanged")
     private fun applyFullUpdate(performChanges: () -> Unit) {
-        /** without [DiffUtil] */
         val oldPosition = viewPager.currentItem
-        val currentItemId = items.itemId(oldPosition)
+        val currentItemId = dataMoel.itemId(oldPosition)
         performChanges()
         adapter().notifyDataSetChanged()
-        if (items.contains(currentItemId)) {
-            val newPosition =
-                (0 until items.size).indexOfFirst { items.itemId(it) == currentItemId }
-            viewPager.setCurrentItem(newPosition, false)
+        if (dataMoel.contains(currentItemId)) {
+            selectToCurrentItem(currentItemId)
         }
+    }
+
+    private fun selectToCurrentItem(currentItemId: Long) {
+        val newPosition = (0 until dataMoel.size).indexOfFirst { dataMoel.itemId(it) == currentItemId }
+        viewPager.setCurrentItem(newPosition, false)
     }
 
     private fun applyDeltaUpdate(performChanges: () -> Unit) {
         /** using [DiffUtil] */
-        val idsOld = items.createIdSnapshot()
+        val idsOld = dataMoel.createIdSnapshot()
         performChanges()
-        val idsNew = items.createIdSnapshot()
+        val idsNew = dataMoel.createIdSnapshot()
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int = idsOld.size
             override fun getNewListSize(): Int = idsNew.size
