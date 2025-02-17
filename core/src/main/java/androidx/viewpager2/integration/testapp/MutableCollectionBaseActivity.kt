@@ -103,18 +103,14 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
    */
   @SuppressLint("NotifyDataSetChanged")
   private fun applyFullUpdate(performChanges: () -> Unit) {
-    val oldPosition = viewPager.currentItem
-    val currentItemId = dataModel.itemId(oldPosition)
+    val oldPosition: Int = viewPager.currentItem
+    val currentItemId: Long = dataModel.itemId(oldPosition)
     performChanges.invoke()
     adapter().notifyDataSetChanged()
     if (dataModel.contains(currentItemId)) {
-      selectToCurrentItem(currentItemId)
+      val newPosition = (0 until dataModel.size).indexOfFirst { dataModel.itemId(it) == currentItemId }
+      viewPager.setCurrentItem(newPosition, false)
     }
-  }
-
-  private fun selectToCurrentItem(currentItemId: Long) {
-    val newPosition = (0 until dataModel.size).indexOfFirst { dataModel.itemId(it) == currentItemId }
-    viewPager.setCurrentItem(newPosition, false)
   }
 
   private fun applyDeltaUpdate(performChanges: () -> Unit) {
