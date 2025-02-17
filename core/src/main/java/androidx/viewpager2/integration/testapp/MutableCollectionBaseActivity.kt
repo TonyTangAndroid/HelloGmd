@@ -131,7 +131,7 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
   private fun applyDeltaUpdate(performChanges: () -> Unit) {
     /** using [DiffUtil] */
     val oldIdList: List<Long> = dataModel.createIdSnapshot()
-    performChanges()
+    performChanges
     val newIdList = dataModel.createIdSnapshot()
     DiffUtil.calculateDiff(DiffUtilCallback(oldIdList, newIdList), true).dispatchUpdatesTo(adapter())
   }
