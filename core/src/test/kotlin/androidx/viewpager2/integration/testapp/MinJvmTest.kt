@@ -6,6 +6,6 @@ class MinJvmTest {
 
   @org.junit.Test
   fun test123() {
-    Truth.assertThat(1).isNotEqualTo(2)
+    Truth.assertThat("2").isNotEqualTo(2)
   }
 }
