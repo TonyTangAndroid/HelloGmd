@@ -18,13 +18,10 @@ package androidx.viewpager2.integration.testapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Spinner
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
@@ -35,118 +32,94 @@ import androidx.viewpager2.widget.ViewPager2
  * Shows how to use notifyDataSetChanged with [ViewPager2]
  */
 abstract class MutableCollectionBaseActivity : FragmentActivity() {
-    private lateinit var buttonAddAfter: Button
-    private lateinit var buttonAddBefore: Button
-    private lateinit var buttonGoTo: Button
-    private lateinit var buttonRemove: Button
-    private lateinit var itemSpinner: Spinner
-    private lateinit var checkboxDiffUtil: CheckBox
-    private lateinit var viewPager: ViewPager2
+  private lateinit var buttonAddAfter: Button
+  private lateinit var buttonAddBefore: Button
+  private lateinit var buttonGoTo: Button
+  private lateinit var buttonRemove: Button
+  private lateinit var itemSpinner: Spinner
+  private lateinit var checkboxDiffUtil: CheckBox
+  private lateinit var viewPager: ViewPager2
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mutable_collection)
-        initUI()
-        setupViewPager()
-        setupSpinner()
-        setupListener()
+
+  val dataModel: ItemsViewModel by viewModels()
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_mutable_collection)
+    initUI()
+    setupListener()
+  }
+
+  abstract fun createViewPagerAdapter(): RecyclerView.Adapter<*>
+
+  private fun adapter(): RecyclerView.Adapter<*> {
+    return viewPager.adapter!!
+  }
+
+  private fun setupListener() {
+    buttonGoTo.setOnClickListener {
+      viewPager.setCurrentItem(itemSpinner.selectedItemPosition, true)
     }
 
-    private fun setupListener() {
-        buttonGoTo.setOnClickListener {
-            viewPager.setCurrentItem(itemSpinner.selectedItemPosition, true)
-        }
-
-        buttonRemove.setOnClickListener {
-            changeDataSet { dataModel.removeAt(itemSpinner.selectedItemPosition) }
-        }
-
-        buttonAddBefore.setOnClickListener {
-            changeDataSet { dataModel.addNewAt(itemSpinner.selectedItemPosition) }
-        }
-
-        buttonAddAfter.setOnClickListener {
-            changeDataSet { dataModel.addNewAt(itemSpinner.selectedItemPosition + 1) }
-        }
+    buttonRemove.setOnClickListener {
+      changeDataSet { dataModel.removeAt(itemSpinner.selectedItemPosition) }
     }
 
-    private fun changeDataSet(performChanges: () -> Unit) {
-        if (checkboxDiffUtil.isChecked) {
-            applyDeltaUpdate(performChanges)
-        } else {
-            applyFullUpdate(performChanges)
-        }
-        // item spinner update
-        (itemSpinner.adapter as BaseAdapter).notifyDataSetChanged()
+    buttonAddBefore.setOnClickListener {
+      changeDataSet { dataModel.addNewAt(itemSpinner.selectedItemPosition) }
     }
 
-    private fun setupViewPager() {
-        viewPager.adapter = createViewPagerAdapter()
+    buttonAddAfter.setOnClickListener {
+      changeDataSet { dataModel.addNewAt(itemSpinner.selectedItemPosition + 1) }
     }
+  }
 
-    private fun setupSpinner() {
-        itemSpinner.adapter = object : BaseAdapter() {
-            override fun getItem(position: Int): String = dataModel.getItemById(getItemId(position))
-            override fun getItemId(position: Int): Long = dataModel.itemId(position)
-            override fun getCount(): Int = dataModel.size
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
-                ((convertView as TextView?) ?: TextView(parent.context)).apply {
-                    textDirection = View.TEXT_DIRECTION_LOCALE
-                    text = getItem(position)
-                }
-
-        }
+  private fun changeDataSet(performChanges: () -> Unit) {
+    if (checkboxDiffUtil.isChecked) {
+      applyDeltaUpdate(performChanges)
+    } else {
+      applyFullUpdate(performChanges)
     }
+    // item spinner update
+    (itemSpinner.adapter as BaseAdapter).notifyDataSetChanged()
+  }
 
-    private fun initUI() {
-        buttonAddAfter = findViewById(R.id.buttonAddAfter)
-        buttonAddBefore = findViewById(R.id.buttonAddBefore)
-        buttonGoTo = findViewById(R.id.buttonGoTo)
-        buttonRemove = findViewById(R.id.buttonRemove)
-        itemSpinner = findViewById(R.id.itemSpinner)
-        checkboxDiffUtil = findViewById(R.id.useDiffUtil)
-        viewPager = findViewById(R.id.viewPager)
+  private fun initUI() {
+    buttonAddAfter = findViewById(R.id.buttonAddAfter)
+    buttonAddBefore = findViewById(R.id.buttonAddBefore)
+    buttonGoTo = findViewById(R.id.buttonGoTo)
+    buttonRemove = findViewById(R.id.buttonRemove)
+    itemSpinner = findViewById(R.id.itemSpinner)
+    checkboxDiffUtil = findViewById(R.id.useDiffUtil)
+    viewPager = findViewById(R.id.viewPager)
+    viewPager.adapter = createViewPagerAdapter()
+    itemSpinner.adapter = ItemSpinnerAdaptor(dataModel)
+  }
+
+  /**
+   * Key takeaway here:
+   * The [ViewPager2.getCurrentItem] reflects the source of truth of the item being selected. And We should track this position to
+   * continously reflect the same item after the data set changed.
+   */
+  @SuppressLint("NotifyDataSetChanged")
+  private fun applyFullUpdate(performChanges: () -> Unit) {
+    val oldPosition: Int = viewPager.currentItem
+    val currentItemId: Long = dataModel.itemId(oldPosition)
+    performChanges.invoke()
+    adapter().notifyDataSetChanged()
+    if (dataModel.contains(currentItemId)) {
+      val newPosition = dataModel.positionByItemId(currentItemId)
+      viewPager.setCurrentItem(newPosition, false)
     }
+  }
 
-    abstract fun createViewPagerAdapter(): RecyclerView.Adapter<*>
+  private fun applyDeltaUpdate(performChanges: () -> Unit) {
+    /** using [DiffUtil] */
+    val oldIdList: List<Long> = dataModel.createIdSnapshot()
+    performChanges.invoke()
+    val newIdList = dataModel.createIdSnapshot()
+    DiffUtil.calculateDiff(DiffUtilCallback(oldIdList, newIdList), true).dispatchUpdatesTo(adapter())
+  }
 
-    val dataModel: ItemsViewModel by viewModels()
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun applyFullUpdate(performChanges: () -> Unit) {
-        val oldPosition = viewPager.currentItem
-        val currentItemId = dataModel.itemId(oldPosition)
-        performChanges()
-        adapter().notifyDataSetChanged()
-        if (dataModel.contains(currentItemId)) {
-            selectToCurrentItem(currentItemId)
-        }
-    }
-
-    private fun selectToCurrentItem(currentItemId: Long) {
-        val newPosition = (0 until dataModel.size).indexOfFirst { dataModel.itemId(it) == currentItemId }
-        viewPager.setCurrentItem(newPosition, false)
-    }
-
-    private fun applyDeltaUpdate(performChanges: () -> Unit) {
-        /** using [DiffUtil] */
-        val oldIdList = dataModel.createIdSnapshot()
-        performChanges()
-        val newIdList = dataModel.createIdSnapshot()
-        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun getOldListSize(): Int = oldIdList.size
-            override fun getNewListSize(): Int = newIdList.size
-
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                oldIdList[oldItemPosition] == newIdList[newItemPosition]
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                areItemsTheSame(oldItemPosition, newItemPosition)
-        }, true).dispatchUpdatesTo(adapter())
-    }
-
-    private fun adapter(): RecyclerView.Adapter<*> {
-        return viewPager.adapter!!
-    }
 }
 
