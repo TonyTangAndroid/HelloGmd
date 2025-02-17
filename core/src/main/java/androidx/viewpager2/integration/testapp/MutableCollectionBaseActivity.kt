@@ -112,6 +112,7 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
       viewPager.setCurrentItem(newPosition, false)
     }
   }
+
   private fun applyDeltaUpdate(performChanges: () -> Unit) {
     /** using [DiffUtil] */
     val oldIdList: List<Long> = dataModel.createIdSnapshot()
