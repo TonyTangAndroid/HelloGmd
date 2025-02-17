@@ -23,7 +23,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.viewpager2.integration.testapp.MutableCollectionBaseActivity
+import androidx.viewpager2.integration.testapp.mutable_collection.MutableCollectionBaseActivity
 import androidx.viewpager2.integration.testapp.R
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.equalTo

@@ -18,7 +18,7 @@ package androidx.viewpager2.integration.testapp.test
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.viewpager2.integration.testapp.MutableCollectionViewActivity
+import androidx.viewpager2.integration.testapp.mutable_collection_view.MutableCollectionViewActivity
 import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)

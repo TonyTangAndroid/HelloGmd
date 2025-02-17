@@ -22,6 +22,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import androidx.viewpager2.integration.testapp.mutable_collection_fragment.MutableCollectionFragmentActivity
+import androidx.viewpager2.integration.testapp.mutable_collection_view.MutableCollectionViewActivity
 
 /**
  * This activity lists all the activities in this application.

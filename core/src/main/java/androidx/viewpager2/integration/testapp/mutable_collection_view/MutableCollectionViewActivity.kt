@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.viewpager2.integration.testapp
+package androidx.viewpager2.integration.testapp.mutable_collection_view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +24,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.integration.testapp.mutable_collection.MutableCollectionBaseActivity
+import androidx.viewpager2.integration.testapp.R
 import androidx.viewpager2.widget.ViewPager2
 
 /**

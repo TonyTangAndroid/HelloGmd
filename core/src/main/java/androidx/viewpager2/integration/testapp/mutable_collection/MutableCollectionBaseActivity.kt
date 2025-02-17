@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.viewpager2.integration.testapp
+package androidx.viewpager2.integration.testapp.mutable_collection
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -26,6 +26,10 @@ import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.integration.testapp.DiffUtilCallback
+import androidx.viewpager2.integration.testapp.ItemSpinnerAdaptor
+import androidx.viewpager2.integration.testapp.ItemsViewModel
+import androidx.viewpager2.integration.testapp.R
 import androidx.viewpager2.widget.ViewPager2
 
 /**
