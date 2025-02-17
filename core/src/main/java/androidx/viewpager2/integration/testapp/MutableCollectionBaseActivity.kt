@@ -40,11 +40,20 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
   private lateinit var checkboxDiffUtil: CheckBox
   private lateinit var viewPager: ViewPager2
 
+
+  val dataModel: ItemsViewModel by viewModels()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_mutable_collection)
     initUI()
     setupListener()
+  }
+
+  abstract fun createViewPagerAdapter(): RecyclerView.Adapter<*>
+
+  private fun adapter(): RecyclerView.Adapter<*> {
+    return viewPager.adapter!!
   }
 
   private fun setupListener() {
@@ -87,10 +96,6 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
     itemSpinner.adapter = ItemSpinnerAdaptor(dataModel)
   }
 
-  abstract fun createViewPagerAdapter(): RecyclerView.Adapter<*>
-
-  val dataModel: ItemsViewModel by viewModels()
-
   @SuppressLint("NotifyDataSetChanged")
   private fun applyFullUpdate(performChanges: () -> Unit) {
     val oldPosition = viewPager.currentItem
@@ -115,8 +120,5 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
     DiffUtil.calculateDiff(DiffUtilCallback(oldIdList, newIdList), true).dispatchUpdatesTo(adapter())
   }
 
-  private fun adapter(): RecyclerView.Adapter<*> {
-    return viewPager.adapter!!
-  }
 }
 
