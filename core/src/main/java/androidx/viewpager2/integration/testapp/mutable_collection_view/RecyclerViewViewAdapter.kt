@@ -22,6 +22,9 @@ import androidx.viewpager2.integration.testapp.ItemsViewModel
 
 class RecyclerViewViewAdapter(private val clickRegistry: ClickRegistry, private val items: ItemsViewModel) :
   RecyclerView.Adapter<PageViewHolder>() {
+
+  override fun getItemCount(): Int = items.size
+  override fun getItemId(position: Int): Long = items.itemId(position)
   override fun onCreateViewHolder(parent: ViewGroup, type: Int) = PageViewHolder(parent)
   override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
     val itemId = holder.itemId
@@ -30,8 +33,5 @@ class RecyclerViewViewAdapter(private val clickRegistry: ClickRegistry, private 
     val itemText: String = items.getItemById(itemId)
     holder.bind(itemText, clickHandler, clickCountProvider)
   }
-
-  override fun getItemCount(): Int = items.size
-  override fun getItemId(position: Int): Long = items.itemId(position)
 }
 
