@@ -44,7 +44,6 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
   private lateinit var checkboxDiffUtil: CheckBox
   private lateinit var viewPager: ViewPager2
 
-
   val dataModel: ItemsViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
