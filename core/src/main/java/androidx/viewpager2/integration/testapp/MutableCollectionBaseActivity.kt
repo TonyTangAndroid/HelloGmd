@@ -96,6 +96,11 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
     itemSpinner.adapter = ItemSpinnerAdaptor(dataModel)
   }
 
+  /**
+   * Key takeaway here:
+   * The [ViewPager2.getCurrentItem] reflects the source of truth of the item being selected. And We should track this position to
+   * continously reflect the same item after the data set changed.
+   */
   @SuppressLint("NotifyDataSetChanged")
   private fun applyFullUpdate(performChanges: () -> Unit) {
     val oldPosition = viewPager.currentItem
