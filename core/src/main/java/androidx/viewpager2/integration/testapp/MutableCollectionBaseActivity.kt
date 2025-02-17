@@ -130,15 +130,15 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
 
     private fun applyDeltaUpdate(performChanges: () -> Unit) {
         /** using [DiffUtil] */
-        val idsOld = dataModel.createIdSnapshot()
+        val oldIdList = dataModel.createIdSnapshot()
         performChanges()
-        val idsNew = dataModel.createIdSnapshot()
+        val newIdList = dataModel.createIdSnapshot()
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun getOldListSize(): Int = idsOld.size
-            override fun getNewListSize(): Int = idsNew.size
+            override fun getOldListSize(): Int = oldIdList.size
+            override fun getNewListSize(): Int = newIdList.size
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                idsOld[oldItemPosition] == idsNew[newItemPosition]
+                oldIdList[oldItemPosition] == newIdList[newItemPosition]
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
                 areItemsTheSame(oldItemPosition, newItemPosition)
