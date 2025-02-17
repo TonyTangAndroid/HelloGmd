@@ -36,7 +36,7 @@ private const val KEY_CLICK_COUNT = "androidx.viewpager2.integration.testapp.KEY
  */
 class MutableCollectionFragmentActivity : MutableCollectionBaseActivity() {
     override fun createViewPagerAdapter(): RecyclerView.Adapter<*> {
-        val items = items // avoids resolving the ViewModel multiple times
+        val items = dataModel // avoids resolving the ViewModel multiple times
         return object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): PageFragment {
                 val itemId = items.itemId(position)
