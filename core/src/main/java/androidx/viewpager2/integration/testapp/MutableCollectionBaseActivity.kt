@@ -95,7 +95,7 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
   private fun applyFullUpdate(performChanges: () -> Unit) {
     val oldPosition = viewPager.currentItem
     val currentItemId = dataModel.itemId(oldPosition)
-    performChanges()
+    performChanges.invoke()
     adapter().notifyDataSetChanged()
     if (dataModel.contains(currentItemId)) {
       selectToCurrentItem(currentItemId)
@@ -110,7 +110,7 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
   private fun applyDeltaUpdate(performChanges: () -> Unit) {
     /** using [DiffUtil] */
     val oldIdList: List<Long> = dataModel.createIdSnapshot()
-    performChanges()
+    performChanges.invoke()
     val newIdList = dataModel.createIdSnapshot()
     DiffUtil.calculateDiff(DiffUtilCallback(oldIdList, newIdList), true).dispatchUpdatesTo(adapter())
   }
