@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.viewpager2.integration.testapp
+package androidx.viewpager2.integration.testapp.mutable_collection_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +25,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.integration.testapp.mutable_collection.MutableCollectionBaseActivity
+import androidx.viewpager2.integration.testapp.R
 import androidx.viewpager2.widget.ViewPager2
 
 private const val KEY_ITEM_TEXT = "androidx.viewpager2.integration.testapp.KEY_ITEM_TEXT"

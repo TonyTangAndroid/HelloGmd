@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MutableCollectionFragmentActivity"
+        <activity android:name=".mutable_collection_fragment.MutableCollectionFragmentActivity"
           android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MutableCollectionViewActivity"
+        <activity android:name=".mutable_collection_view.MutableCollectionViewActivity"
           android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
