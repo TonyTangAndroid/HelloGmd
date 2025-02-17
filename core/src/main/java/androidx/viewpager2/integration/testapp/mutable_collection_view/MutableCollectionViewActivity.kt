@@ -17,7 +17,6 @@
 package androidx.viewpager2.integration.testapp.mutable_collection_view
 
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.integration.testapp.mutable_collection.MutableCollectionBaseActivity
@@ -28,21 +27,10 @@ import androidx.viewpager2.widget.ViewPager2
  * represents pages as [View]s.
  */
 class MutableCollectionViewActivity : MutableCollectionBaseActivity() {
-    override fun createViewPagerAdapter(): RecyclerView.Adapter<*> {
-        val items = dataModel // avoids resolving the ViewModel multiple times
-        val clickRegistry: ClickRegistry by viewModels()
-        return object : RecyclerView.Adapter<PageViewHolder>() {
-            override fun onCreateViewHolder(parent: ViewGroup, type: Int) = PageViewHolder(parent)
-            override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-                val itemId = holder.itemId
-                val clickHandler = { clickRegistry.registerClick(itemId) }
-                val clickCountProvider = { clickRegistry.getClickCount(itemId) }
-                holder.bind(items.getItemById(itemId), clickHandler, clickCountProvider)
-            }
-
-            override fun getItemCount(): Int = items.size
-            override fun getItemId(position: Int): Long = items.itemId(position)
-        }.apply { setHasStableIds(true) }
-    }
+  override fun createViewPagerAdapter(): RecyclerView.Adapter<*> {
+    val items = dataModel
+    val clickRegistry: ClickRegistry by viewModels()
+    return RecyclerViewViewAdapter(clickRegistry, items).apply { setHasStableIds(true) }
+  }
 }
 
