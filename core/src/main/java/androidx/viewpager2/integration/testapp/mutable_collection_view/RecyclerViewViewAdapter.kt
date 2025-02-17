@@ -16,26 +16,22 @@
 
 package androidx.viewpager2.integration.testapp.mutable_collection_view
 
-import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.integration.testapp.ItemsViewModel
 
-/**
- * Shows how to use [RecyclerView.Adapter.notifyDataSetChanged] with [ViewPager2]. Here [ViewPager2]
- * represents pages as [View]s.
- */
-class MutableCollectionViewActivityx() : RecyclerView.Adapter<PageViewHolder> {
-    override fun onCreateViewHolder(parent: ViewGroup, type: Int) = PageViewHolder(parent)
+class RecyclerViewViewAdapter(private val clickRegistry: ClickRegistry, private val items: ItemsViewModel) :
+  RecyclerView.Adapter<PageViewHolder>() {
+  override fun onCreateViewHolder(parent: ViewGroup, type: Int) = PageViewHolder(parent)
   override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-      val itemId = holder.itemId
-      val clickHandler = { clickRegistry.registerClick(itemId) }
-      val clickCountProvider = { clickRegistry.getClickCount(itemId) }
-      holder.bind(items.getItemById(itemId), clickHandler, clickCountProvider)
-    }
+    val itemId = holder.itemId
+    val clickHandler = { clickRegistry.registerClick(itemId) }
+    val clickCountProvider = { clickRegistry.getClickCount(itemId) }
+    val itemText: String = items.getItemById(itemId)
+    holder.bind(itemText, clickHandler, clickCountProvider)
+  }
 
-    override fun getItemCount(): Int = items.size
-    override fun getItemId(position: Int): Long = items.itemId(position)
+  override fun getItemCount(): Int = items.size
+  override fun getItemId(position: Int): Long = items.itemId(position)
 }
 
