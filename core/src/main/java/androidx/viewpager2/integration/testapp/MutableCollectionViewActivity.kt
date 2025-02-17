@@ -32,7 +32,7 @@ import androidx.viewpager2.widget.ViewPager2
  */
 class MutableCollectionViewActivity : MutableCollectionBaseActivity() {
     override fun createViewPagerAdapter(): RecyclerView.Adapter<*> {
-        val items = dataMoel // avoids resolving the ViewModel multiple times
+        val items = dataModel // avoids resolving the ViewModel multiple times
         val clickRegistry: ClickRegistry by viewModels()
         return object : RecyclerView.Adapter<PageViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, type: Int) = PageViewHolder(parent)
