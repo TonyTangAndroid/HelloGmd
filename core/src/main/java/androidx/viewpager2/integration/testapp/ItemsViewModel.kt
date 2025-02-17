@@ -8,6 +8,9 @@ class ItemsViewModel : ViewModel() {
 
     private val items = (1..9).map { longToItem(nextValue++) }.toMutableList()
 
+
+    fun positionByItemId(itemId: Long): Int= (0 until size).indexOfFirst { itemId(it) == itemId }
+
     fun getItemById(id: Long): String = items.first { itemToLong(it) == id }
     fun itemId(position: Int): Long = itemToLong(items[position])
     fun contains(itemId: Long): Boolean = items.any { itemToLong(it) == itemId }

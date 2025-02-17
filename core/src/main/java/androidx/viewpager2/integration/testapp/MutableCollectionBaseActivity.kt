@@ -108,11 +108,10 @@ abstract class MutableCollectionBaseActivity : FragmentActivity() {
     performChanges.invoke()
     adapter().notifyDataSetChanged()
     if (dataModel.contains(currentItemId)) {
-      val newPosition = (0 until dataModel.size).indexOfFirst { dataModel.itemId(it) == currentItemId }
+      val newPosition = dataModel.positionByItemId(currentItemId)
       viewPager.setCurrentItem(newPosition, false)
     }
   }
-
   private fun applyDeltaUpdate(performChanges: () -> Unit) {
     /** using [DiffUtil] */
     val oldIdList: List<Long> = dataModel.createIdSnapshot()
