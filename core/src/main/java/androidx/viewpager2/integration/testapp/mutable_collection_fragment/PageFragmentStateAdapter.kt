@@ -16,22 +16,20 @@
 
 package androidx.viewpager2.integration.testapp.mutable_collection_fragment
 
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.integration.testapp.mutable_collection.MutableCollectionBaseActivity
-import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.integration.testapp.ItemsViewModel
 
-const val KEY_ITEM_TEXT = "androidx.viewpager2.integration.testapp.KEY_ITEM_TEXT"
-const val KEY_CLICK_COUNT = "androidx.viewpager2.integration.testapp.KEY_CLICK_COUNT"
-
-/**
- * Shows how to use [FragmentStateAdapter.notifyDataSetChanged] with [ViewPager2]. Here [ViewPager2]
- * represents pages as [Fragment]s.
- */
-class MutableCollectionFragmentActivity : MutableCollectionBaseActivity() {
-  override fun createViewPagerAdapter(): RecyclerView.Adapter<*> {
-    return PageFragmentStateAdapter(dataModel, this)
+class PageFragmentStateAdapter(private val items: ItemsViewModel, activity: FragmentActivity) :
+  FragmentStateAdapter(activity) {
+  override fun createFragment(position: Int): PageFragment {
+    val itemId = items.itemId(position)
+    val itemText = items.getItemById(itemId)
+    return PageFragment.newFragment(itemText)
   }
+
+  override fun getItemCount(): Int = items.size
+  override fun getItemId(position: Int): Long = items.itemId(position)
+  override fun containsItem(itemId: Long): Boolean = items.contains(itemId)
 }
 
